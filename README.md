@@ -1,3 +1,11 @@
-# Installation
-- `composer install`
-- `php artisan app:install`
+# Пет-проект: "Интернет-магазин"
+- Кастомный логгер для отправки логов в телеграм
+- Отслеживание проблем при продакшене и отправка информации в телеграм, при их возникновении
+
+## Установка
+1. `composer install`
+2. `php artisan app:install`
+
+## .env
+- TELEGRAM_BOT_API_KEY - api ключ телеграм бота
+- LOGGING_CHAT_ID - chat_id для отправки логов

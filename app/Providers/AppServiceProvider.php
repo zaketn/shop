@@ -6,6 +6,7 @@ use App\Http\Kernel;
 use Carbon\CarbonInterval;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
@@ -20,19 +21,33 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Model::shouldBeStrict(app()->isProduction());
+        Model::shouldBeStrict();
 
-        DB::whenQueryingForLongerThan(500, function (Connection $connection) {
-            Log::channel('telegram')->debug('whenQueryingForLongerThan: ' . $connection->query()->toSql());
-        });
+        if (App::isProduction()) {
+            $maxQueryDuration = CarbonInterval::second(10);
+            DB::whenQueryingForLongerThan($maxQueryDuration, function (Connection $connection) use ($maxQueryDuration) {
+                Log::channel('telegram')
+                    ->debug("Запросы выполняются дольше $maxQueryDuration->seconds секунд: " . $connection->totalQueryDuration());
+            });
 
-        $kernel = app(Kernel::class);
+            $maxSingleQueryDuration = 3;
+            DB::listen(function ($query) use ($maxSingleQueryDuration) {
+                if ($query->time > $maxSingleQueryDuration) {
+                    Log::channel('telegram')
+                        ->debug("Запрос длится дольше $maxSingleQueryDuration секунд: " . $query->sql, $query->bindings);
+                }
+            });
 
-        $kernel->whenRequestLifecycleIsLongerThan(
-            CarbonInterval::second(5),
-            function () {
-                Log::channel('telegram')->debug('whenRequestLifecycleIsLongerThan: ' . Request::url());
-            }
-        );
+            $kernel = app(Kernel::class);
+
+            $maxRequestDuration = CarbonInterval::second(5);
+            $kernel->whenRequestLifecycleIsLongerThan(
+                $maxRequestDuration,
+                function () use ($maxRequestDuration) {
+                    Log::channel('telegram')
+                        ->debug("Жизненный цикл пользовательского запроса дольше $maxRequestDuration->seconds секунд: " . Request::url());
+                }
+            );
+        }
     }
 }
