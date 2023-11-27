@@ -3,6 +3,13 @@
 - Отслеживание проблем при продакшене и отправка информации в телеграм, при их возникновении
 
 ## Установка
+### Установка через docker
+`docker-compose up -d`
+
+- Доступ к php и composer - `docker-compose exec php sh`
+- Доступ к node(npm) - docker-compose run --rm node _install | run dev | update | ..._
+
+### Запуск проекта
 1. `composer install`
 2. `php artisan app:install`
 
