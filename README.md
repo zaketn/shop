@@ -8,7 +8,7 @@
 
 - Проект доступен по адресу localhost:8000
 - Доступ к php и composer - `docker-compose exec php sh`
-- Доступ к node(npm) - `docker-compose run --rm node _install | run dev | update | ...`
+- Доступ к node(npm) - `docker-compose run --rm node install | run dev | update | ...`
 
 Доступ к БД:
 - Название БД - DB_DATABASE из .env
@@ -24,3 +24,8 @@
 ## .env
 - TELEGRAM_BOT_API_KEY - api ключ телеграм бота
 - LOGGING_CHAT_ID - chat_id для отправки логов
+
+## Вспомогательные команды
+- `php artisan app:refresh`
+  - Очистка базы данных
+  - Удаление изображений из public
