@@ -11,8 +11,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        //TODO: fix, не выполняется, бездействие после долгого ожидания
-
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title');
