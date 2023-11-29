@@ -7,15 +7,15 @@
 `docker-compose up -d`
 
 - Проект доступен по адресу localhost:8000
+- По адресу localhost:8080 доступен phpmyadmin
 - Доступ к php и composer - `docker-compose exec php sh`
-- Доступ к node(npm) - `docker-compose run --rm node install | run dev | update | ...`
+- Доступ к node(npm) - `docker-compose run --rm node ...`
+- Запуск vite в dev режиме - `docker compose run --rm -p 5173:5173 node run dev`
 
 Доступ к БД:
 - Название БД - DB_DATABASE из .env
 - Пользователь - DB_USERNAME из .env
 - Пароль - DB_PASSWORD из .env
-
-По адресу localhost:8080 доступен phpmyadmin
 
 ### Запуск проекта
 1. `composer install`
